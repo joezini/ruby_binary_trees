@@ -29,6 +29,3 @@ def build_tree(data)
 end
 
 build_tree([1,2,3,4,5])
-
-# Can't set the children in the initializer because we don't
-# yet have a reference to this node to pass them as a parent
