@@ -46,11 +46,11 @@ def breadth_first_search(root, search_value)
 			result = queue[0]
 			break
 		end
-		if queue[0].left
+		if queue[0].left && search_value < queue[0].value
 			#puts "Adding #{queue[0].value}'s left to queue"
 			queue << queue[0].left
 		end
-		if queue[0].right
+		if queue[0].right && search_value > queue[0].value
 			#puts "Adding #{queue[0].value}'s right to queue"
 			queue << queue[0].right
 		end
@@ -63,8 +63,35 @@ def breadth_first_search(root, search_value)
 	end
 end
 
+def depth_first_search(root, search_value)
+	# Check first node from starting point 
+	stack = [root]
+	result = []
+	until stack.empty?
+		current = stack[-1]
+		puts "Checking #{current.value}"
+		if current.value == search_value
+			result = current
+			break
+		end
+		if current.right && search_value > current.value
+			puts "Pushing #{current.value}'s right to stack"
+			stack.push(current.right)
+		end
+		if current.left && search_value < current.value
+			puts "Pushing #{current.value}'s left to stack"
+			stack.push(current.left)
+		end
+		stack.pop
+	end
+	if result
+		result
+	else
+		nil
+	end
+end
 
-def find(x)
+def find_breadth(x)
 	test_tree = build_tree([4,7,2,5,9,8,0,1])
 	if !breadth_first_search(test_tree, x).nil?
 		puts "#{x} found!"
@@ -73,6 +100,19 @@ def find(x)
 	end
 end
 
+find_breadth(5)
+find_breadth(3)
+find_breadth(10)
 
-find(5)
-find(3)
+def find_depth(x)
+	test_tree = build_tree([4,7,2,5,9,8,0,1])
+	if !depth_first_search(test_tree, x).nil?
+		puts "#{x} found!"
+	else
+		puts "#{x} not found!"
+	end
+end
+
+find_depth(8)
+find_depth(6)
+find_depth(1)
