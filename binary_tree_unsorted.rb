@@ -64,28 +64,52 @@ def breadth_first_search(root, search_value)
 end
 
 def depth_first_search(root, search_value)
-	# Check first node from starting point 
+	# Node goes on stack as it's visited & checked. Then visit, check
+	# and add first child of that node, etc. When a node has no
+	# unvisited children, pop off stack and visit new top of stack
 	stack = [root]
-	result = []
+	result = nil
+	visited = []
 	until stack.empty?
-		current = stack[-1]
-		puts "Checking #{current.value}"
+		current = stack.last
+		#puts "Checking #{current.value}"
+		if !visited.include?(current)
+			visited << current
+		end
 		if current.value == search_value
 			result = current
 			break
 		end
-		if current.right && search_value > current.value
-			puts "Pushing #{current.value}'s right to stack"
-			stack.push(current.right)
-		end
-		if current.left && search_value < current.value
-			puts "Pushing #{current.value}'s left to stack"
+		if current.left && !visited.include?(current.left)
+			#puts "Pushing #{current.value}'s left to stack"
 			stack.push(current.left)
+		elsif current.right && !visited.include?(current.right)
+			#puts "Pushing #{current.value}'s right to stack"
+			stack.push(current.right)
+		else
+			stack.pop
 		end
-		stack.pop
 	end
 	if result
 		result
+	else
+		nil
+	end
+end
+
+def dfs_rec(node, search_value)
+	l = nil
+	r = nil
+	if node.left
+		l = dfs_rec(node.left, search_value)
+	end
+	return l if l
+	if node.right
+		r = dfs_rec(node.right, search_value)
+	end
+	return r if r
+	if node.value == search_value
+		node
 	else
 		nil
 	end
@@ -116,3 +140,18 @@ end
 find_depth(8)
 find_depth(6)
 find_depth(1)
+
+def find_dfs(x)
+	test_tree = build_tree([4,7,2,5,9,8,0,1])
+	if !dfs_rec(test_tree, x).nil?
+		puts "#{x} found!"
+	else
+		puts "#{x} not found!"
+	end
+end
+
+find_dfs(11)
+find_dfs(7)
+find_dfs(1)
+find_dfs(4)
+find_dfs(40)
